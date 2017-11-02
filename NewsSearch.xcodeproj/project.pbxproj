@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		9F1CE6751F97E2080080BB5A /* UIViewExtensions copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1CE6741F97E2080080BB5A /* UIViewExtensions copy.swift */; };
+		9F27491D1FA94745003B1BE4 /* NewsPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F27491C1FA94745003B1BE4 /* NewsPopUpView.swift */; };
+		9F2749201FA947AD003B1BE4 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F27491E1FA947AD003B1BE4 /* UILabelExtensions.swift */; };
+		9F2749211FA947AD003B1BE4 /* UIButtonExtensions copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F27491F1FA947AD003B1BE4 /* UIButtonExtensions copy.swift */; };
 		9F82DDD91F9FF71100C7EF2F /* NewsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82DDD81F9FF71100C7EF2F /* NewsSearchController.swift */; };
 		9F82DDDB1F9FF8E800C7EF2F /* NewsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82DDDA1F9FF8E800C7EF2F /* NewsTableView.swift */; };
 		9F82DDE41FA1420800C7EF2F /* NewsSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82DDE21FA1420800C7EF2F /* NewsSourceCell.swift */; };
@@ -19,8 +22,10 @@
 		9F904D951F96E14200DD1B8D /* SourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F904D941F96E14200DD1B8D /* SourceModel.swift */; };
 		9F904D9D1F96E6C200DD1B8D /* Identifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F904D9C1F96E6C200DD1B8D /* Identifiers.swift */; };
 		9F904DA71F96E8F800DD1B8D /* NewsSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F904DA61F96E8F800DD1B8D /* NewsSearchBar.swift */; };
+		9FE9127B1FA64E85008CADE2 /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9127A1FA64E85008CADE2 /* CGRectExtensions.swift */; };
 		9FEBB2501F9EC01000B7259E /* SegmentedControlExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEBB24F1F9EC01000B7259E /* SegmentedControlExtensions.swift */; };
 		9FEBB2521F9EC2CC00B7259E /* CategoryEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEBB2511F9EC2CC00B7259E /* CategoryEnums.swift */; };
+		9FF023031FA95416009A93C2 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF023021FA95416009A93C2 /* UIFontExtensions.swift */; };
 		9FF383EC1F94005500F9D79F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF383EB1F94005500F9D79F /* AppDelegate.swift */; };
 		9FF383F11F94005500F9D79F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FF383EF1F94005500F9D79F /* Main.storyboard */; };
 		9FF383F31F94005500F9D79F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FF383F21F94005500F9D79F /* Assets.xcassets */; };
@@ -29,6 +34,9 @@
 
 /* Begin PBXFileReference section */
 		9F1CE6741F97E2080080BB5A /* UIViewExtensions copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewExtensions copy.swift"; sourceTree = "<group>"; };
+		9F27491C1FA94745003B1BE4 /* NewsPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPopUpView.swift; sourceTree = "<group>"; };
+		9F27491E1FA947AD003B1BE4 /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
+		9F27491F1FA947AD003B1BE4 /* UIButtonExtensions copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButtonExtensions copy.swift"; sourceTree = "<group>"; };
 		9F82DDD81F9FF71100C7EF2F /* NewsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsSearchController.swift; sourceTree = "<group>"; };
 		9F82DDDA1F9FF8E800C7EF2F /* NewsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableView.swift; sourceTree = "<group>"; };
 		9F82DDE21FA1420800C7EF2F /* NewsSourceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsSourceCell.swift; sourceTree = "<group>"; };
@@ -40,8 +48,10 @@
 		9F904D941F96E14200DD1B8D /* SourceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceModel.swift; sourceTree = "<group>"; };
 		9F904D9C1F96E6C200DD1B8D /* Identifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiers.swift; sourceTree = "<group>"; };
 		9F904DA61F96E8F800DD1B8D /* NewsSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsSearchBar.swift; sourceTree = "<group>"; };
+		9FE9127A1FA64E85008CADE2 /* CGRectExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
 		9FEBB24F1F9EC01000B7259E /* SegmentedControlExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlExtensions.swift; sourceTree = "<group>"; };
 		9FEBB2511F9EC2CC00B7259E /* CategoryEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEnums.swift; sourceTree = "<group>"; };
+		9FF023021FA95416009A93C2 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		9FF383E81F94005500F9D79F /* NewsSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FF383EB1F94005500F9D79F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9FF383F01F94005500F9D79F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -128,6 +138,10 @@
 		9FEBB24E1F9EBFF800B7259E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9FF023021FA95416009A93C2 /* UIFontExtensions.swift */,
+				9F27491F1FA947AD003B1BE4 /* UIButtonExtensions copy.swift */,
+				9F27491E1FA947AD003B1BE4 /* UILabelExtensions.swift */,
+				9FE9127A1FA64E85008CADE2 /* CGRectExtensions.swift */,
 				9F1CE6741F97E2080080BB5A /* UIViewExtensions copy.swift */,
 				9FEBB24F1F9EC01000B7259E /* SegmentedControlExtensions.swift */,
 			);
@@ -154,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				9FF383F71F94005500F9D79F /* Info.plist */,
+				9F27491C1FA94745003B1BE4 /* NewsPopUpView.swift */,
 				9F904DA51F96E7D400DD1B8D /* ViewControllers */,
 				9F904DA41F96E7BE00DD1B8D /* Foundation Files */,
 				9F904D9E1F96E73E00DD1B8D /* Models */,
@@ -244,14 +259,19 @@
 				9F904D911F96E02E00DD1B8D /* NetworkManager .swift in Sources */,
 				9FF383EC1F94005500F9D79F /* AppDelegate.swift in Sources */,
 				9F904D931F96E13700DD1B8D /* ArticleModel.swift in Sources */,
+				9F2749201FA947AD003B1BE4 /* UILabelExtensions.swift in Sources */,
 				9FEBB2521F9EC2CC00B7259E /* CategoryEnums.swift in Sources */,
 				9F1CE6751F97E2080080BB5A /* UIViewExtensions copy.swift in Sources */,
 				9F82DDDB1F9FF8E800C7EF2F /* NewsTableView.swift in Sources */,
+				9FE9127B1FA64E85008CADE2 /* CGRectExtensions.swift in Sources */,
+				9F2749211FA947AD003B1BE4 /* UIButtonExtensions copy.swift in Sources */,
 				9F904D951F96E14200DD1B8D /* SourceModel.swift in Sources */,
 				9FEBB2501F9EC01000B7259E /* SegmentedControlExtensions.swift in Sources */,
+				9F27491D1FA94745003B1BE4 /* NewsPopUpView.swift in Sources */,
 				9F904D891F96DC0200DD1B8D /* HomeViewController.swift in Sources */,
 				9F82DDE41FA1420800C7EF2F /* NewsSourceCell.swift in Sources */,
 				9F904DA71F96E8F800DD1B8D /* NewsSearchBar.swift in Sources */,
+				9FF023031FA95416009A93C2 /* UIFontExtensions.swift in Sources */,
 				9F82DDD91F9FF71100C7EF2F /* NewsSearchController.swift in Sources */,
 				9F904D9D1F96E6C200DD1B8D /* Identifiers.swift in Sources */,
 			);

@@ -26,7 +26,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72S-SE-QVT">
-                        <rect key="frame" x="74" y="72" width="224" height="14.5"/>
+                        <rect key="frame" x="170.5" y="72" width="31" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -44,9 +44,7 @@
                     <constraint firstItem="ALS-7a-gCN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="IsT-2l-7G4"/>
                     <constraint firstItem="72S-SE-QVT" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ALS-7a-gCN" secondAttribute="bottom" constant="16" id="Xhk-RK-arA"/>
                     <constraint firstItem="ALS-7a-gCN" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="blL-vk-LbI"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="72S-SE-QVT" secondAttribute="trailing" constant="65" id="dOy-Ir-jlR"/>
                     <constraint firstAttribute="trailing" secondItem="Q1G-Ak-eTq" secondAttribute="trailing" constant="8" id="fP4-Zu-PPG"/>
-                    <constraint firstItem="72S-SE-QVT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="66" id="lJ6-aq-riz"/>
                     <constraint firstItem="Q1G-Ak-eTq" firstAttribute="top" secondItem="72S-SE-QVT" secondAttribute="bottom" constant="16" id="n0O-nC-ppE"/>
                     <constraint firstItem="Q1G-Ak-eTq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="sPh-3T-Ebz"/>
                 </constraints>

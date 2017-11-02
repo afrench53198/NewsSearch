@@ -9,41 +9,80 @@
 
 import UIKit
 
-
-
-
-class NewsSourceViewModel {
+class NewsSourceViewModel: NSObject {
     
-    var networker: Networker
-    var sources: [NewsSource] = []
+    var networker: SourcesNetworkManager
+    var view: NewsTableView
+    var shouldShowResults = false
+    var sources: [NewsSource] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.view.reloadData()
+            }
+        }
+    }
+    var filteredSources: [NewsSource] = []
     
-
-    init(with networker: Networker) {
+    init(with networker: SourcesNetworkManager, tableView: NewsTableView) {
         self.networker = networker
+        self.view = tableView
+        super.init()
+        
+        view.dataSource = self
+        getData()
     }
     
-    enum Result<Value> {
-        case success(Value)
-        case failure(Error)
-    }
-
-    
-    func provideData(callback: @escaping (Result<[NewsSource]>) -> ()) -> ()  {
+    func getData() -> ()  {
+        networker.getSourcesFromNetwork { [weak self] (sources) in
+            self?.sources = sources
+            DispatchQueue.main.async {
+                self?.view.reloadData()
+            }
+        }
        
-        networker.session { (data) in
-          
-                  let decoder = JSONDecoder()
-                do {
-                    let sourceResponse = try decoder.decode(SourceResponse.self, from: data)
-                    callback(.success(sourceResponse.sources))
-                } catch {
-                    callback(.failure(error))
-            }
-            }
+    }
 
+    func filterData(with input: String) {
+      
+        filteredSources = sources.filter {
+         return $0.name.localizedCaseInsensitiveContains(input)
+        }
+        shouldShowResults = true
+        DispatchQueue.main.async {
+            self.view.reloadData()
+        }
+    }
+    func getSourcesWithCategories(categories: [SourceCategory]) {
+        networker.getSourcesWithCategories(categories: categories) {[weak self] (sources) in
+            self?.sources = sources
         }
     }
     
+}
 
+// MARK: - TableViewDataSource
+extension NewsSourceViewModel: UITableViewDataSource {
+   
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if shouldShowResults {
+            return filteredSources.count
+        } else {
+            return sources.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = view.dequeueReusableCell(withIdentifier: Identifier.NewsSourceCell.rawValue) as! NewsSourceCell
+        if shouldShowResults {
+            let filteredSource = filteredSources[indexPath.row]
+            cell.configure(with: filteredSource)
+            return cell
+        }
+       
+        let source = sources[indexPath.row]
+        cell.configure(with: source)
+        return cell
+    }
+}
 
 

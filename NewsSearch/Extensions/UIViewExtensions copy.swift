@@ -34,8 +34,14 @@ extension UIView {
         var size: CGSize
         var padding: CGFloat
         
-        init(guideView: UIView, position: ViewPosition, size:CGSize, padding: CGFloat) {
+        init(withFrame guideView: UIView, position: ViewPosition, size:CGSize, padding: CGFloat) {
             self.guide = guideView.frame
+            self.position = position
+            self.size = size
+            self.padding = padding
+        }
+        init(withBounds guideView: UIView, position: ViewPosition, size:CGSize, padding: CGFloat) {
+            self.guide = guideView.bounds
             self.position = position
             self.size = size
             self.padding = padding
