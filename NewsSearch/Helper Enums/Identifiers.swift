@@ -57,10 +57,6 @@ enum NewsAPI: String {
             return "/v1/sources"
         }
     }
-   
-    var key: URLQueryItem {
-        return URLQueryItem(name: "apiKey", value: "925668bfe44c42dcb70474c065e09b79")
-    }
 }
 
 

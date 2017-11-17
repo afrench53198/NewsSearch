@@ -12,17 +12,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var keyQuery: URLQueryItem? {
-        if let path = Bundle.main.path(forResource: "Keys", ofType: "plist") {
-            let key = NSDictionary(contentsOfFile: path)
-            if let dict = key {
-                let key = dict["apiKey"] as! String
-                return URLQueryItem(name: "apiKey", value: key)
-            }
-        }
-        print("App Delegate couldn't parse Key from Dictionary")
-        return nil 
-    }
+
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         var appearance = UINavigationBar.appearance()

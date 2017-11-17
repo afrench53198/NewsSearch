@@ -19,7 +19,7 @@ class NetworkManager: NewsNetworker {
     var currentSession: URLSession?
     init() {
     }
-    
+    private var key: URLQueryItem? 
 
     private func makeUrlForSources() -> URL? {
         var urlComponents = URLComponents()
@@ -40,8 +40,10 @@ class NetworkManager: NewsNetworker {
         urlComponents.path = NewsAPI.articles.path
     
         let sourceQueryItem = URLQueryItem(name: "source", value: source.id)
-        let apiKeyQueryitem = NewsAPI.articles.key
-        var queryItems: [URLQueryItem] = [sourceQueryItem,apiKeyQueryitem]
+
+        guard let keyQuery = AppDelegate().keyQuery else {return nil}
+
+        var queryItems: [URLQueryItem] = [sourceQueryItem,keyQuery]
         urlComponents.queryItems = queryItems
         
         guard let sortByQuery = sortedBy else {return urlComponents.url}
