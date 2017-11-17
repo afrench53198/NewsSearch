@@ -7,7 +7,7 @@
 //
 
 import UIKit
-// Struct for parsint initial response
+// Struct for parsing initial response
 struct SourceResponse: Decodable {
     var status: String
     var sources: [NewsSource]
@@ -20,5 +20,6 @@ struct NewsSource: Decodable {
     var description: String
     var url: String
     var category: String
+    var id: String
 
 }

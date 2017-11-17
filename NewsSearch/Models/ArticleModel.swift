@@ -8,9 +8,20 @@
 
 import UIKit
 
-class NewsArticle  {
-    
-    
-    
-    
+struct ArticleResponse: Decodable  {
+    var status: String
+    var sortBy: String
+    var source: String
+    var articles: [NewsArticle]
+}
+
+
+
+struct NewsArticle: Decodable  {
+    var author: String?
+    var title: String
+    var description: String
+    var url: String
+    var urlToImage: String
+    var publishedAt: String?
 }

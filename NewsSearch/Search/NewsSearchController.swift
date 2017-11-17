@@ -21,11 +21,13 @@ class NewsSearchController: UISearchController, UISearchBarDelegate {
 
     var customSearchBar: NewsSearchBar!
     var customDelegate: CustomSearchControllerDelegate!
+    var shadowOn: Bool = false 
     
     init(searchResultsController: UIViewController?,frame: CGRect, font: UIFont, textColor: UIColor, bgColor: UIColor ) {
         super.init(searchResultsController: searchResultsController)
-       customSearchBar = NewsSearchBar(frame: frame, font: font, textColor: textColor, tintColor: bgColor)
+        customSearchBar = NewsSearchBar(frame: frame, font: font, textColor: textColor, tintColor: bgColor)
         customSearchBar.delegate = self
+        dimsBackgroundDuringPresentation = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,7 +43,39 @@ class NewsSearchController: UISearchController, UISearchBarDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-  
+    
+    func toggleShadow() {
+        
+        let thisLayer = self.customSearchBar.layer
+        if shadowOn {
+     
+            DispatchQueue.main.async {
+                let animation = CABasicAnimation(keyPath: "shadowOpacity")
+                animation.fromValue = 0.7
+                animation.toValue = 0
+                animation.duration = 0.3
+                animation.timingFunction =  CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+                thisLayer.add(animation, forKey: "shadowOpacity")
+                thisLayer.shadowOpacity = 0
+            }
+           
+        } else {
+            thisLayer.removeAllAnimations()
+            DispatchQueue.main.async {
+                let animation = CABasicAnimation(keyPath: "shadowOpacity")
+                animation.fromValue = 0
+                animation.toValue = 0.7
+                animation.duration = 0.3
+                animation.timingFunction =  CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+                thisLayer.add(animation, forKey: "shadowOpacity")
+                thisLayer.shadowOpacity = 0.7
+            }
+        }
+        shadowOn = !shadowOn
+    }
+    
+    
+    // MARK: - Search delegate
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         customDelegate.didStartSearching()
     }

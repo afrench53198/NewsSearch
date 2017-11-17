@@ -17,13 +17,14 @@ class NewsSourceCell: UITableViewCell {
 
     @IBOutlet weak var SourceName: UILabel!
     
-    @IBOutlet weak var Url: UILabel!
+    @IBOutlet weak var Category: UILabel!
     @IBOutlet weak var SourceDescription: UILabel!
     
     func configure(with data:NewsSource){
         SourceName.text = data.name
-        Url.text = data.url
+        Category.text = data.category
         SourceDescription.text = data.description
+        SourceName.layer.cornerRadius = 5
     }
     
 

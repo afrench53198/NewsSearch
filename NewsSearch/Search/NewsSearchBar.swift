@@ -13,10 +13,10 @@ class NewsSearchBar: UISearchBar {
     
     var preferredFont: UIFont!
     var preferredTextColor: UIColor!
-    var shadowOn: Bool
+ 
     
     init(frame: CGRect, font: UIFont, textColor: UIColor, tintColor: UIColor) {
-        shadowOn = false
+   
         super.init(frame: frame)
         
         self.frame = frame
@@ -35,7 +35,7 @@ class NewsSearchBar: UISearchBar {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        shadowOn = false
+
         super.init(coder: aDecoder)
         
         fatalError("init(coder:) has not been implemented")
@@ -70,28 +70,7 @@ class NewsSearchBar: UISearchBar {
         super.draw(rect)
     }
     
-    func toggleShadow() {
-        
-        let thisLayer = self.layer
-        if shadowOn {
-            thisLayer.removeAllAnimations()
-            let animation = CABasicAnimation(keyPath: "shadowOpacity")
-            animation.fromValue = 0.7
-            animation.toValue = 0
-            animation.duration = 0.5
-            thisLayer.add(animation, forKey: "shadowOpacity")
-             thisLayer.shadowOpacity = 0
-        } else {
-            thisLayer.removeAllAnimations()
-            let animation = CABasicAnimation(keyPath: "shadowOpacity")
-            animation.fromValue = 0
-            animation.toValue = 0.7
-            animation.duration = 0.5
-            thisLayer.add(animation, forKey: "shadowOpacity")
-            thisLayer.shadowOpacity = 0.7
-        }
-        shadowOn = !shadowOn
-    }
+    
     
     
     private func indexOfSearchFieldInSubviews() -> Int! {
