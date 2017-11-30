@@ -17,18 +17,16 @@ extension UITableView {
 
 class NewsTableView: UITableView {
     
-    override init(frame: CGRect, style: UITableViewStyle) {
+    init(frame: CGRect, style: UITableViewStyle, type: Identifier.TableViewCell) {
         super.init(frame: frame, style: style)
-        configure()
+        registerNib(name: type)
+        self.rowHeight = 120
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configure() {
-        registerNib(name: .NewsSourceCell)
-    }
     
     
 }

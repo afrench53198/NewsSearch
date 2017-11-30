@@ -8,139 +8,158 @@
 
 
 import UIKit
+enum FilterState: Int {
+    case unfiltered
+    case filtered
+}
 
-class NewsSourceViewModel: NSObject {
+protocol NewsViewModel: class {
     
-    var networker: NetworkManager
+    var networker: NewsNetworker {get}
+    var currentData: [NewsItem] {get set}
+    
+    func filterData(with category: [Category])
+    func filterData(with query:String)
+    func getData()
+    /// Replenishes the news items from stored data after search
+    func refreshData(with categories: [Category]?)
+    func returnData(at index: Int) -> NewsItem
+    
+}
+
+class NewsSourceViewModel: NSObject, NewsViewModel {
+    
+    
+    var storedData: [NewsItem] = []  {
+        didSet {
+            DispatchQueue.main.async {
+                self.view.reloadData()
+            }
+        }
+    }
+    var currentData: [NewsItem] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.view.reloadData()
+            }
+        }
+    }
+    var categorizedData: [Category:[NewsItem]] = [:]
+    var networker: NewsNetworker
     var view: NewsTableView
-    var filterState: FilterState = .unfiltered
-    var sources: [NewsSource] = [] {
-        didSet {
-            DispatchQueue.main.async {
-                self.view.reloadData()
-            }
-        }
-    }
-    var categorizedSources: [NewsSource] = [] {
-        didSet {
-            DispatchQueue.main.async {
-                self.view.reloadData()
-            }
-        }
-    }
-    var filteredSources: [NewsSource] = [] {
-        didSet {
-            DispatchQueue.main.async {
-                self.view.reloadData()
-            }
-        }
-    }
-    
+    var filterState = FilterState.unfiltered
+ 
     init(with networker: NetworkManager, tableView: NewsTableView) {
         self.networker = networker
         self.view = tableView
         super.init()
         view.dataSource = self
         getData()
+        
+    }
+    /// View model returns appropriate data for use in the View controller 
+    func returnData(at index: Int) -> NewsItem  {
+        return currentData[index]
     }
     
     func getData() -> ()  {
-        self.filterState = .unfiltered
         networker.getSourcesFromNetwork { [weak self] (sources) in
-            self?.sources = sources
+            self?.storedData = sources
+            self?.currentData = sources
         }
+        categorizeData()
     }
-    /// Filters data with search text and provides the array of sources depending on the filter state 
-    func filterData(with input: String) {
+    /// Filters data with search text and provides the array of sources depending on the filter state
+    func filterData(with query: String) {
+        if query.isEmpty {
+            return
+        }
         switch filterState {
         case .unfiltered:
-            filterState = .filtered
-            filteredSources = sources.filter {
-                return $0.name.localizedCaseInsensitiveContains(input)
-            }
-        case .filtered:
-            filteredSources = filteredSources.filter{
-                 return $0.name.localizedCaseInsensitiveContains(input)
+            currentData = storedData.filter {
+                guard let thisName = $0.name else {return false}
+                return thisName.localizedCaseInsensitiveContains(query) || ($0.category?.localizedCaseInsensitiveContains(query))!
             }
         default:
-            filterState = .filteredAndCategorized
-            filteredSources = categorizedSources.filter {
-                return $0.name.localizedCaseInsensitiveContains(input)
+            currentData = currentData.filter {
+                guard let thisName = $0.name else {return false}
+                return thisName.localizedCaseInsensitiveContains(query) || ($0.category?.localizedCaseInsensitiveContains(query))!
             }
         }
+        
     }
     
-    func filterSourcesWithCategories(categories: [SourceCategory]) {
-        var returnArray: [NewsSource] = []
-        switch filterState {
-        case .unfiltered :
-            filterState = .categorized
-            for i in categories {
-                returnArray += sources.filter {
-                   return $0.category == i.rawValue
-                }
-                categorizedSources = returnArray
-            }
-        case .filtered :
-            filterState = .filteredAndCategorized
-            for i in categories {
-                returnArray += sources.filter {
-                    return $0.category == i.rawValue
-                }
-                filteredSources = returnArray
-            }
-        default:
-            filterState = .categorized
-            for i in categories {
-                returnArray += sources.filter {
-                    return $0.category == i.rawValue
-                }
-                categorizedSources = returnArray
-            }
+    func filterData(with categories: [Category])  {
+        filterState = .filtered
+        var returnArray: [NewsItem] = []
+        for i in categories {
+            returnArray += storedData.filter({ (item) -> Bool in
+                guard let thisCategory = item.category else {return false}
+                return thisCategory == i.rawValue
+            })
         }
+        currentData = returnArray
+    }
+
+    func refreshData(with categories: [Category]?) {
+        categories != nil ? filterData(with: categories!) : setData()
+    }
+   
+    func categorizeData() {
+        categorizedData[.business] = storedData.filter({ (item) -> Bool in
+           return item.category! == Category.business.rawValue
+        })
+        categorizedData[.entertainment] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.entertainment.rawValue
+        })
+        categorizedData[.gaming] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.gaming.rawValue
+        })
+        categorizedData[.healthAndMedical] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.healthAndMedical.rawValue
+        })
+        categorizedData[.scienceAndNature] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.scienceAndNature.rawValue
+        })
+        categorizedData[.general] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.general.rawValue
+        })
+        categorizedData[.politics] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.politics.rawValue
+        })
+        categorizedData[.sport] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.sport.rawValue
+        })
+        categorizedData[.technology] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.technology.rawValue
+        })
+        categorizedData[.music] = storedData.filter({ (item) -> Bool in
+            return item.category! == Category.music.rawValue
+        })
+    }
+/// Refills the current data property with the stored data gathered in initial networking call
+    private func setData() {
+        filterState = .unfiltered
+        currentData = storedData
     }
 }
-
 // MARK: - TableViewDataSource
 extension NewsSourceViewModel: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch filterState {
-        case .unfiltered:
-            return sources.count
-        case .categorized:
-            return categorizedSources.count
-        default:
-            return filteredSources.count
-        }
+        return currentData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = view.dequeueReusableCell(withIdentifier: Identifier.TableViewCell.NewsSourceCell.rawValue) as! NewsSourceCell
-        switch filterState {
-        case .unfiltered:
-            let source = sources[indexPath.row]
-            cell.configure(with: source)
-            return cell
-        case .categorized:
-            let source = categorizedSources[indexPath.row]
-            cell.configure(with: source)
-            return cell
-        default:
-            let source = filteredSources[indexPath.row]
+        
+        if let source = currentData[indexPath.row] as? NewsSource {
             cell.configure(with: source)
             return cell
         }
+        
+        return UITableViewCell()
     }
+    
 }
-
-    extension NewsSourceViewModel {
-    enum FilterState {
-        case unfiltered
-        case filtered
-        case filteredAndCategorized
-        case categorized
-    }
-}
-
 

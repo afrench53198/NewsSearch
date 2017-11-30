@@ -9,17 +9,18 @@
 import UIKit
 
 class ArticlesViewController: UIViewController {
- // TODO: - Make Table view and view model so the controller fills with articles from selected source
-
+    // TODO: - Migrate to V2 and update features as necessary-implement article search
     
-    var tableView: ArticlesTableView!
-    var viewModel: ArticlesViewModel!
+    
+    var tableView: NewsTableView!
+    var viewModel: NewsViewModel?
     var source: NewsSource!
-
- 
+    var segmentedControl: UISegmentedControl!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-       configure()
+        configure()
     }
     override func viewDidLayoutSubviews() {
         setupViews()
@@ -32,30 +33,34 @@ class ArticlesViewController: UIViewController {
         configureNavBar()
         configureTableView()
         viewModel = ArticlesViewModel(with: NetworkManager(), tableView: tableView, source: source)
-    
+        
     }
-   // Sets frame in DidLayoutSubviews so when the device rotates the views orient themselves correctly
+    // Sets frame in DidLayoutSubviews so when the device rotates the views orient themselves correctly
     private func setupViews() {
         let tableViewSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height - 40)
         let tableViewFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: tableViewSize, padding: 0).makeLayout()
         tableView.frame = tableViewFrame
         
     }
-   /// Sets Table View frame and data source/delegate
+    /// Sets Table View frame and data source/delegate
     private func configureTableView() {
         let tableViewSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height - 40)
         let tableViewFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: tableViewSize, padding: 0).makeLayout()
-        tableView = ArticlesTableView(frame: tableViewFrame, style: .plain)
-        tableView.dataSource = viewModel
+        tableView = NewsTableView(frame: tableViewFrame, style: .plain, type: Identifier.TableViewCell.ArticleCell)
+        tableView.dataSource = viewModel as? UITableViewDataSource
         self.view.addSubview(tableView)
     }
-    //Styles the Navigation Bar 
+    ///Styles the Navigation Bar
     private func configureNavBar () {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = "\(source.name) Articles"
-
     }
    
+    private func configureSegmentedControl() {
+        let segmentedControlFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: CGSize(width: self.view.bounds.width, height: 32), padding: 0).makeLayout()
+        let items = ["latest","popular","relevant"]
+        segmentedControl = UISegmentedControl.makeControl(color: .black, items: items, frame: segmentedControlFrame, action: nil)
+    }
     
     
     

@@ -7,25 +7,19 @@
 //
 
 import UIKit
-protocol PopupViewDelegate {
-    func closeButtonPressed()
-    func websiteButtonPressed()
-    func articlesButtonPressed()
-}
+
 
 class NewsPopUpView: UIView{
     
-    var source: NewsSource!
+    var source: NewsItem!
     var delegate: PopupViewDelegate?
     private var toWebsiteButton: UIButton!
     private var closeButton: UIButton!
     private var articlesButton: UIButton!
     private var sourceDescriptionLabel: UILabel!
-    
-  
-    
-    init(with source: NewsSource, frame: CGRect) {
-        self.source = source
+
+    init(with item: NewsItem, frame: CGRect) {
+        self.source = item
         super.init(frame: frame)
         self.backgroundColor = .white
     }
@@ -52,17 +46,22 @@ class NewsPopUpView: UIView{
         articlesButton = UIButton.makeTextButton(frame: sourcesButtonFrame, type: .rounded, color: .darkGrey, title: "Articles", target: self, selector: #selector(sourcesButtonPressed(_:)))
         self.addSubview(articlesButton)
         
-        toWebsiteButton = UIButton.makeTextButton(frame: toWebsiteFrame, type: .rounded, color: .darkGrey, title: "Website", target: nil, selector: nil)
+        toWebsiteButton = UIButton.makeTextButton(frame: toWebsiteFrame, type: .rounded, color: .darkGrey, title: "Website", target: self, selector: #selector(websiteButtonPressed(_:)))
         self.addSubview(toWebsiteButton)
         
         closeButton = UIButton.makeImageButton(frame: closeButtonFrame, image: imageForButton, pressedImage: nil, target: self, selector: #selector(closeButtonPressed(_:)))
         self.addSubview(closeButton)
         
-        sourceDescriptionLabel = UILabel.createAhtauLabel(fontType: .system, fontSize: .p1, text: source.description, color: .black)
+        sourceDescriptionLabel = UILabel.createAhtauLabel(fontType: .system, fontSize: .p1, text: source.description!, color: .black)
         sourceDescriptionLabel.numberOfLines = 10
         sourceDescriptionLabel.frame = sourceDescriptionFrame
         sourceDescriptionLabel.textAlignment = .center
         self.addSubview(sourceDescriptionLabel)
+    }
+    
+   
+     @objc func websiteButtonPressed(_ sender: UIButton) {
+        delegate?.websiteButtonPressed()
     }
     
     @objc func closeButtonPressed(_ sender: UIButton) {

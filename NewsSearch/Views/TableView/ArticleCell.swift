@@ -10,28 +10,28 @@ import UIKit
 
 class ArticleCell: UITableViewCell {
     
+    @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var articleImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var datePublished: UILabel!
     @IBOutlet weak var articleDescription: UILabel!
 
-    override func awakeFromNib() {
-        
-    }
 
     func configure(with article: NewsArticle) {
-        awakeFromNib()
         titleLabel.text = article.title
         authorLabel.text = article.author
-        datePublished.text = article.publishedAt
         articleDescription.text = article.description
+        categoryLabel.text = article.source.name
         setImageForView(from: article.urlToImage)
+        guard let date = article.publishedAt else {return}
+        datePublished.text = formatDate(date)
     }
     
     
-   private func setImageForView(from url:String) {
-        getDataForImage(with: url) { (image) in
+   private func setImageForView(from url:String?) {
+    guard let imageAddress = url else {return}
+    getDataForImage(with: imageAddress) { (image) in
             self.articleImageView.image = image
         }
     }
@@ -55,4 +55,17 @@ class ArticleCell: UITableViewCell {
             task.resume()
         }
     }
+    private func formatDate(_ with: String) -> String {
+        var formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        guard let date = formatter.date(from: with) else {return ""}
+        formatter.dateFormat = ("MM-dd-yyyy hh:mm a")
+       return formatter.string(from: date)
+    }
+
+
 }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol CustomSearchControllerDelegate {
+@objc protocol CustomSearchControllerDelegate {
     func didStartSearching()
     
     func didTapOnSearchButton()
@@ -15,10 +15,12 @@ protocol CustomSearchControllerDelegate {
     func didTapOnCancelButton()
     
     func didChangeSearchText(searchText: String)
+    
+    @objc optional func scopeBarIndexDidChange(to index: Int)
 }
 
 class NewsSearchController: UISearchController, UISearchBarDelegate {
-
+    // TODO: - Set Shadow path on animation so it moves smoothly with view
     var customSearchBar: NewsSearchBar!
     var customDelegate: CustomSearchControllerDelegate!
     var shadowOn: Bool = false 
@@ -44,50 +46,54 @@ class NewsSearchController: UISearchController, UISearchBarDelegate {
         // Do any additional setup after loading the view.
     }
     
-    func toggleShadow() {
+    func toggleShadowAndScopeBar() {
         
         let thisLayer = self.customSearchBar.layer
+        
         if shadowOn {
-     
+            self.customSearchBar.showsScopeBar = false
             DispatchQueue.main.async {
-                let animation = CABasicAnimation(keyPath: "shadowOpacity")
-                animation.fromValue = 0.7
-                animation.toValue = 0
-                animation.duration = 0.3
-                animation.timingFunction =  CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-                thisLayer.add(animation, forKey: "shadowOpacity")
-                thisLayer.shadowOpacity = 0
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                    // Animations to shrink view and animate out shadow
+                    thisLayer.shadowOpacity = 0
+                    thisLayer.shadowOffset.height -= 48
+                    self.customSearchBar.frame.height -= 48
+                })
             }
-           
         } else {
-            thisLayer.removeAllAnimations()
             DispatchQueue.main.async {
-                let animation = CABasicAnimation(keyPath: "shadowOpacity")
-                animation.fromValue = 0
-                animation.toValue = 0.7
-                animation.duration = 0.3
-                animation.timingFunction =  CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-                thisLayer.add(animation, forKey: "shadowOpacity")
-                thisLayer.shadowOpacity = 0.7
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                    // Animations to grow view and animate in shadow
+                    thisLayer.shadowOpacity = 0.7
+                    self.customSearchBar.frame.height += 48
+                    thisLayer.shadowOffset.height += 48
+                    self.customSearchBar.showsScopeBar = true
+                })
             }
         }
         shadowOn = !shadowOn
     }
-    
-    
-    // MARK: - Search delegate
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        customDelegate.didStartSearching()
-    }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        customSearchBar.resignFirstResponder()
-        customDelegate.didTapOnSearchButton()
-    }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        customSearchBar.resignFirstResponder()
-        customDelegate.didTapOnCancelButton()
-    }
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        customDelegate.didChangeSearchText(searchText: searchText)
-    }
+  
+// MARK: - Search delegate
+func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    customDelegate.didStartSearching()
 }
+func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    customSearchBar.resignFirstResponder()
+    customDelegate.didTapOnSearchButton()
+}
+func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    customSearchBar.resignFirstResponder()
+    customDelegate.didTapOnCancelButton()
+}
+func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    customDelegate.didChangeSearchText(searchText: searchText)
+}
+func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+    customDelegate.scopeBarIndexDidChange!(to: selectedScope)
+}
+
+
+}
+
+

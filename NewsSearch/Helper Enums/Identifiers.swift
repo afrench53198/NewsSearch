@@ -16,8 +16,14 @@ enum Identifier {
         case NewsSourceCell
     }
     enum ViewController:String {
+        // Article Controller Storyboard ID
         case ArticlesController
-        case ToArticles
+      // Segue ID to ArticlesController
+        case segueToArticles
+        
+        case NewsWebVC
+        case segueToNewsWebVC
+        
     }
    
 }
@@ -52,9 +58,9 @@ enum NewsAPI: String {
     var path: String {
         switch self {
         case .articles:
-            return "/v1/articles"
+            return "/v2/top-headlines"
         case .sources:
-            return "/v1/sources"
+            return "/v2/sources"
         }
     }
 }

@@ -7,38 +7,64 @@
 
 
 import UIKit
-
+protocol PopupViewDelegate  {
+    func closeButtonPressed()
+    func websiteButtonPressed()
+    func articlesButtonPressed()
+}
 
 class HomeViewController: UIViewController {
     
     @IBOutlet weak var sourceSegmentedControl: UISegmentedControl!
     
-    var viewModel: NewsSourceViewModel!
+    var viewModel: NewsViewModel!
     var newsSearchController: NewsSearchController!
-    var tableView: NewsTableView!
-    var lastYContentOffset: CGFloat!
+    weak var tableView: NewsTableView?
+    var tableViewFrame: CGRect! {
+        didSet {
+            tableView?.frame = tableViewFrame
+        }
+    }
     var popupView: NewsPopUpView?
+    var currentCategories: [Category]? = []
     var backgroundView: UIView?
-   // This property is used to track the source that would be passed to a new controller
+    let sharedNetworker = NetworkManager()
+    
+    // This property is used to track the source that would be passed to a new controller
     var selectedSource: NewsSource?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
     }
-    
-    override func viewDidLayoutSubviews() {
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
         setupViews()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Handles segue to ArticlesVC
+        if segue.identifier == Identifier.ViewController.segueToArticles.rawValue {
+            if let destinationVC = segue.destination as? ArticlesViewController {
+                //Passes the selected source to the view controller to be used in the network call to get articles for the given source
+                destinationVC.source = selectedSource
+            }
+        }
+            // Handles segue to NewsWebVC
+        else if segue.identifier == Identifier.ViewController.segueToNewsWebVC.rawValue {
+            if let destinationVC = segue.destination as? NewsWebViewController {
+                //Passes the selected source to the view controller to be used in the network call to get articles for the given source
+                destinationVC.urlString = selectedSource?.url
+            }
+        }
+    }
     /// Function to layout the views after rotation or another change in orientation
     func setupViews() {
         let controlSize = CGSize(width: self.view.frame.width, height: 32)
         let sourceFrame = UIView.ViewLayout(withFrame: self.view, position: .bottomCenter, size: controlSize, padding: 0).makeLayout()
         sourceSegmentedControl?.frame = sourceFrame
         
-        let tableViewFrame = CGRect(x: self.view.bounds.origin.x, y: self.view.frame.minY + 68, width: self.view.bounds.width, height: self.view.frame.height - 100)
-        tableView.frame = tableViewFrame
+        tableViewFrame = CGRect(x: self.view.bounds.origin.x, y: self.view.frame.minY + 68, width: self.view.bounds.width, height: self.view.frame.height - 100)
+        
         
         let barFrame = CGRect(x:self.view.frame.origin.x, y: self.view.frame.origin.y + 20  , width: self.view.frame.width, height: 48)
         newsSearchController.customSearchBar.frame = barFrame
@@ -51,31 +77,29 @@ class HomeViewController: UIViewController {
     
     private func configure() {
         navigationController?.isNavigationBarHidden = true
+        configureTableViewAndViewModel(with: .NewsSourceCell)
         configureSegmentedControl()
-        configureTableView()
-        viewModel = NewsSourceViewModel(with: NetworkManager(),tableView: tableView)
         configureSearchController()
     }
     
     private func configureSegmentedControl() {
-        let items: [String] = ["all", SourceCategory.sport.rawValue,"Breaking News",SourceCategory.entertainment.rawValue,"science"]
+        let items: [String] = ["Sources", "Articles"]
         let controlSize = CGSize(width: self.view.frame.width, height: 32)
         let sourceFrame = UIView.ViewLayout(withFrame: self.view, position: .bottomCenter, size: controlSize, padding:0).makeLayout()
         let control = UISegmentedControl.makeControl(color: .black, items: items, frame: sourceFrame, action: nil)
         control.addTarget(self, action: #selector(sourceControlValueChanged(_:)), for: .valueChanged)
-        control.apportionsSegmentWidthsByContent = true
+        control.backgroundColor = .white
         sourceSegmentedControl = control
         self.view.addSubview(sourceSegmentedControl)
     }
-    
-    private func configureTableView(){
-        let tableViewFrame = CGRect(x: self.view.bounds.origin.x, y: self.view.frame.minY + 48, width: self.view.bounds.width, height: self.view.frame.height - 100)
-        tableView = NewsTableView(frame: tableViewFrame, style: .plain)
-        tableView.layoutMargins = UIEdgeInsetsMake(0, 8, 0, 8)
-        tableView.delegate = self
-        
-        self.view.addSubview(self.tableView)
-        
+    /// Sets attributes and delegates to table view, and initializes the viewModel with the table view
+    private func configureTableViewAndViewModel(with cell: Identifier.TableViewCell){
+        tableViewFrame = CGRect(x: self.view.bounds.origin.x, y: self.view.frame.minY + 74, width: self.view.bounds.width, height: self.view.frame.height - 100)
+        var newsTableView = NewsTableView(frame: tableViewFrame, style: .plain, type: cell)
+        self.tableView = newsTableView
+        newsTableView.delegate = self
+        viewModel = NewsSourceViewModel(with: sharedNetworker, tableView: newsTableView)
+        self.view.addSubview(newsTableView)
     }
     
     private func configureSearchController() {
@@ -85,32 +109,27 @@ class HomeViewController: UIViewController {
         newsSearchController = NewsSearchController(searchResultsController: nil, frame: barFrame, font: UIFont.systemFont(ofSize: 16), textColor: .white, bgColor: .black)
         newsSearchController.customSearchBar.placeholder = "Search Your Sources!"
         newsSearchController.customDelegate = self
-        
+        newsSearchController.customSearchBar.scopeButtonTitles = ["all", Category.sport.rawValue,"Breaking News",Category.entertainment.rawValue,"science"]
         self.view.addSubview(newsSearchController.customSearchBar)
     }
     
     @objc func sourceControlValueChanged(_ sender: UISegmentedControl!) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            viewModel.getData()
-        case 1: viewModel.filterSourcesWithCategories(categories: [SourceCategory.sport])
-        case 2: viewModel.filterSourcesWithCategories(categories: [SourceCategory.business,SourceCategory.general,SourceCategory.politics])
-        case 3: viewModel.filterSourcesWithCategories(categories: [SourceCategory.entertainment,SourceCategory.gaming,SourceCategory.music])
-        case 4: viewModel.filterSourcesWithCategories(categories: [SourceCategory.technology,SourceCategory.scienceAndNature])
-        default:
-            print("Out of range ")
-        }
+        //TODO: - switch tableview data source and perform network call to get articles
+        tableView?.removeFromSuperview()
+        let articlesTableView = NewsTableView(frame: tableViewFrame, style: .plain, type: .ArticleCell)
+        print("Value Changed")
+        viewModel = ArticlesViewModel(with: sharedNetworker, tableView: articlesTableView)
+        tableView = articlesTableView
+        self.view.addSubview(articlesTableView)
+    }
+    private func adjustTableView(_ operation: @escaping ((Int,Int) -> (Int))) {
+        let int1 = Int((tableView?.frame.y)!)
+        let int2 = 48
+        UIView.animate(withDuration: 0.4, animations: {
+            self.tableView?.frame.y = CGFloat(operation(int1,int2))
+        }, completion: nil)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == Identifier.ViewController.ToArticles.rawValue {
-            if let destinationVC = segue.destination as? ArticlesViewController {
-                print("Destination Reached ")
-                //Passes the selected source to the view controller to be used in the network call to get articles for the given source
-                destinationVC.source = selectedSource
-            }
-        }
-    }
 }
 
 
@@ -118,78 +137,71 @@ class HomeViewController: UIViewController {
 extension HomeViewController: CustomSearchControllerDelegate {
     
     func didStartSearching() {
-        self.newsSearchController.toggleShadow()
+        self.newsSearchController.toggleShadowAndScopeBar()
+        adjustTableView(+)
     }
     
     func didTapOnSearchButton() {
         if let text = newsSearchController.customSearchBar.text {
-            if text.characters.count != 0  {
-                viewModel.filterData(with: text)
-            }
+            viewModel.filterData(with: text)
         }
     }
-    
     func didTapOnCancelButton() {
-        switch viewModel.filterState {
-        case .filteredAndCategorized:
-            viewModel.filterState = .categorized
-        case .filtered:
-            viewModel.filterState = .unfiltered
-        default:
-            break
-        }
-        tableView.reloadData()
-        self.newsSearchController.toggleShadow()
+        self.newsSearchController.toggleShadowAndScopeBar()
+        adjustTableView(-)
+        viewModel.refreshData(with: currentCategories ?? nil)
     }
     
     func didChangeSearchText(searchText: String) {
-        if searchText .isEmpty && self.sourceSegmentedControl.selectedSegmentIndex > 0 {
-            viewModel.filterState = .categorized
-            tableView.reloadData()
-        } else if searchText .isEmpty && self.sourceSegmentedControl.selectedSegmentIndex <= 0 {
-            viewModel.filterState = .unfiltered
+        if searchText.isEmpty {
+            viewModel.refreshData(with: currentCategories ?? nil)
+            print("sear")
         }
-        else {
-            viewModel.filterData(with: searchText)
+        viewModel.filterData(with: searchText)
+    
+    }
+    
+    func scopeBarIndexDidChange(to index: Int) {
+        
+        switch index {
+        case 0: viewModel.refreshData(with: nil)
+        currentCategories = nil
+        case 1: viewModel.filterData(with: [Category.sport])
+        currentCategories = [Category.sport]
+        case 2: viewModel.filterData(with: [Category.business,Category.general,Category.politics])
+        currentCategories = [Category.business,Category.general,Category.politics]
+        case 3: viewModel.filterData(with: [Category.entertainment,Category.gaming,Category.music])
+        currentCategories = [Category.entertainment,Category.gaming,Category.music]
+        case 4: viewModel.filterData(with: [Category.technology,Category.scienceAndNature, Category.healthAndMedical])
+        currentCategories = [Category.technology,Category.scienceAndNature, Category.healthAndMedical]
+        default:
+            print("Out of range ")
         }
     }
+    
+    
 }
-
+// MARK: - TableViewDelegate
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let viewFrame = UIView.ViewLayout(withBounds: self.view, position: .center, size: CGSize(width: self.view.bounds.width, height: 400), padding:0).makeLayout()
-        
-        switch viewModel.filterState {
-        case .unfiltered:
-            let source = viewModel.sources[indexPath.row]
-            selectedSource = source
-            popupView = NewsPopUpView(with: source, frame: viewFrame)
-     
-        case .categorized:
-            let source = viewModel.categorizedSources[indexPath.row]
-            selectedSource = source
-            popupView = NewsPopUpView(with: source, frame: viewFrame)
-          
-        default:
-            let source = viewModel.filteredSources[indexPath.row]
-            selectedSource = source
-            popupView = NewsPopUpView(with: source, frame: viewFrame)
-        }
-       
+        let data = viewModel.returnData(at: indexPath.row)
+        popupView = NewsPopUpView(with: data, frame: viewFrame)
         popupView?.delegate = self
         backgroundView = UIView(frame: self.view.frame)
         backgroundView?.backgroundColor = .gray
         backgroundView?.alpha = 0.7
-        
-        if let view = popupView, let bgView = backgroundView {
-            self.view.addSubview(bgView)
+        if let view = popupView, let bg = backgroundView {
+            self.view.addSubview(bg)
             self.view.addSubview(view)
-            self.navigationItem.title = view.source.name
+            self.navigationItem.title = popupView!.source.name
             self.navigationController?.setNavigationBarHidden(false, animated: true)
+            
         }
     }
 }
+
 extension HomeViewController: PopupViewDelegate {
     
     func closeButtonPressed() {
@@ -199,10 +211,10 @@ extension HomeViewController: PopupViewDelegate {
         self.backgroundView?.removeFromSuperview()
     }
     func websiteButtonPressed() {
-        
+        performSegue(withIdentifier: Identifier.ViewController.segueToNewsWebVC.rawValue, sender: self)
     }
     func articlesButtonPressed() {
-        performSegue(withIdentifier: Identifier.ViewController.ToArticles.rawValue, sender: self)
+        performSegue(withIdentifier: Identifier.ViewController.segueToArticles.rawValue, sender: self)
     }
     
     private func animateOutPopupView() {
@@ -223,7 +235,6 @@ extension HomeViewController: PopupViewDelegate {
         group.isRemovedOnCompletion = true
         group.delegate = self.popupView
         thisLayer?.add(group, forKey: "animations")
-        
     }
 }
 

@@ -7,19 +7,23 @@
 //
 
 import UIKit
-// Struct for parsing initial response
+// Struct for parsing initial url response
 struct SourceResponse: Decodable {
     var status: String
     var sources: [NewsSource]
 }
 
-// Struct that is displayed in table view. 
-struct NewsSource: Decodable {
+// represents the abbreviated source object that is to be parsed from an article
+struct ParseableNewsSource: Decodable {
+    var name:String
+    var id: String
+}
 
+// the data type displayed in sources table view.
+class NewsSource: Decodable, NewsItem {
     var name: String
-    var description: String
+    var description: String?
     var url: String
     var category: String
-    var id: String
-
+    var id: String = ""
 }

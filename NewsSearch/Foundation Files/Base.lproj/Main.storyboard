@@ -21,7 +21,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="zlq-nw-qrC"/>
                     <connections>
-                        <segue destination="aeY-uh-6Dt" kind="show" identifier="ToArticles" id="IL2-Lj-xbk"/>
+                        <segue destination="aeY-uh-6Dt" kind="show" identifier="segueToArticles" id="IL2-Lj-xbk"/>
+                        <segue destination="4KI-U5-SVZ" kind="showDetail" identifier="segueToNewsWebVC" id="mkb-cY-EHt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -43,6 +44,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZBp-ii-9hX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3436" y="54"/>
+        </scene>
+        <!--NewsWebVC-->
+        <scene sceneID="bts-TF-zKe">
+            <objects>
+                <viewController title="NewsWebVC" id="4KI-U5-SVZ" customClass="NewsWebViewController" customModule="NewsSearch" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="em8-gg-HaJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="cv7-JV-veq"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kpb-0y-Aeg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1926" y="-1171"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Pgw-uv-sDH">
@@ -82,6 +98,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="urS-M5-FSs"/>
+        <segue reference="IL2-Lj-xbk"/>
     </inferredMetricsTieBreakers>
 </document>

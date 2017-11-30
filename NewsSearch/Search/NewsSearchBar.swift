@@ -27,11 +27,9 @@ class NewsSearchBar: UISearchBar {
         self.tintColor = textColor
         
         self.showsCancelButton = true
-        
         searchBarStyle = UISearchBarStyle.prominent
         isTranslucent = false
-        
-        self.showsScopeBar = true
+    
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,15 +39,18 @@ class NewsSearchBar: UISearchBar {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    override func didMoveToWindow() {
+        configureShadow()
+    }
+
     override func draw(_ rect: CGRect) {
         // Find the index of the search field in the search bar subviews.
-        if let index = indexOfSearchFieldInSubviews() {
+        if let searchFieldIndex = indexOfSearchFieldInSubviews() {
             // Access the search field
-            let searchField: UITextField = subviews[0].subviews[index] as! UITextField
+            let searchField: UITextField = subviews[0].subviews[searchFieldIndex] as! UITextField
             
             // Set its frame.
-            searchField.frame = CGRect(x: 0, y: 5, width: frame.size.width - 80, height: frame.size.height - 10)
+            searchField.frame = CGRect(x: 0, y: 5, width: bounds.size.width - 80, height: bounds.size.height - 10)
             
             // Set the font and text color of the search field.
             searchField.font = preferredFont
@@ -57,21 +58,9 @@ class NewsSearchBar: UISearchBar {
             
             // Set the background color of the search field.
             searchField.backgroundColor = barTintColor
-            
-            let path = UIBezierPath(rect: self.bounds).cgPath
-            let thisLayer = self.layer
-            thisLayer.shadowColor = UIColor.black.cgColor
-            thisLayer.shadowRadius = 10
-            thisLayer.shadowPath = path
-            thisLayer.shadowOpacity = 0
-            thisLayer.shadowOffset = CGSize(width: 0, height: 3)
-            
         }
         super.draw(rect)
     }
-    
-    
-    
     
     private func indexOfSearchFieldInSubviews() -> Int! {
         
@@ -88,16 +77,17 @@ class NewsSearchBar: UISearchBar {
         }   while index < searchBarView.subviews.count
         return index
     }
+
     
-    
-  
-    
-    /*
-     // Only override draw() if you perform custom drawing.
-     // An empty implementation adversely affects performance during animation.
-     override func draw(_ rect: CGRect) {
-     // Drawing code
-     }
-     */
-    
+   private  func configureShadow() {
+        let path = UIBezierPath(rect: self.bounds).cgPath
+        let thisLayer = self.layer
+        thisLayer.shadowColor = UIColor.black.cgColor
+        thisLayer.shadowRadius = 20
+        thisLayer.shadowPath = path
+        thisLayer.shadowOpacity = 0
+        thisLayer.shadowOffset = CGSize(width: 0, height: -5)
+    }
+
 }
+

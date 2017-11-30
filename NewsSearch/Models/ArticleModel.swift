@@ -10,18 +10,16 @@ import UIKit
 
 struct ArticleResponse: Decodable  {
     var status: String
-    var sortBy: String
-    var source: String
     var articles: [NewsArticle]
 }
 
 
-
-struct NewsArticle: Decodable  {
+class NewsArticle: Decodable, NewsItem  {
     var author: String?
     var title: String
-    var description: String
+    var description: String?
     var url: String
-    var urlToImage: String
+    var urlToImage: String?
     var publishedAt: String?
+    var source: ParseableNewsSource
 }
