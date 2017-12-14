@@ -24,14 +24,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        var appearance = UINavigationBar.appearance()
-        appearance.tintColor = .white
-        appearance.barTintColor = .black
-        let key = NSAttributedStringKey.foregroundColor
-        appearance.titleTextAttributes = [ key:UIColor.white]
-        var segControlAppearance = UISegmentedControl.appearance()
-        segControlAppearance.apportionsSegmentWidthsByContent = true
-        return true
+        setAppearances()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = NewsTabBarViewController()
+        window?.makeKeyAndVisible()
+            return true
+
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -55,7 +53,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
+    private func setAppearances() {
+        let appearance = UINavigationBar.appearance()
+        appearance.tintColor = .white
+        appearance.barTintColor = .black
+        let key = NSAttributedStringKey.foregroundColor
+        appearance.titleTextAttributes = [ key:UIColor.white]
+        let segControlAppearance = UISegmentedControl.appearance()
+        segControlAppearance.apportionsSegmentWidthsByContent = true
+        let tabBarAppearance = UITabBar.appearance()
+        tabBarAppearance.barTintColor = .black
+        tabBarAppearance.tintColor = .white
+        tabBarAppearance.isTranslucent = false
+    }
     
 }
 

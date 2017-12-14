@@ -32,7 +32,7 @@ class NetworkManager: NewsNetworker {
         guard let url = urlComponents.url else {print("faultyUrl"); return nil}
         return url
     }
-    /// This function creates a url using the NewsAPI enum. This url is used to make a request to NewsAPi.org to retrieve articles for a given source
+    /// This function creates a url using the NewsAPI enum. Returns top headlines if no source parameter specified
     private func makeUrlForArticles(with sources: [NewsSource]?, query: String?) -> URL? {
         
         var urlComponents = URLComponents()
@@ -48,20 +48,19 @@ class NetworkManager: NewsNetworker {
         guard let theSources = sources else {
            urlComponents.queryItems = queryItems
             if let returnUrl = urlComponents.url {
-               print(returnUrl)
                 return returnUrl
             } else {
-                print("faulty url with no source ")
                 return nil
             }
           }
+      
         for source in theSources {
              let sourceQueryItem = URLQueryItem(name: "sources", value: source.id)
                queryItems.append(sourceQueryItem)
         }
         
         urlComponents.queryItems = queryItems
-        guard let url = urlComponents.url else {print("url for articles is invalid "); return nil}
+        guard let url = urlComponents.url else { return nil}
        // print(url)
         return url
     }
@@ -70,7 +69,7 @@ class NetworkManager: NewsNetworker {
         if let current = currentSession {
             current.finishTasksAndInvalidate()
         }
-        guard let url = makeUrlForSources() else {print("Made Faulty URL for sources data task"); return}
+        guard let url = makeUrlForSources() else { return}
         let session = URLSession(configuration: .default)
         currentSession = session
         let request = URLRequest(url: url)
@@ -102,7 +101,7 @@ class NetworkManager: NewsNetworker {
         if let current = currentSession {
             current.finishTasksAndInvalidate()
         }
-        guard let url = makeUrlForArticles(with: sources, query:nil) else {print("Made Faulty Url for articles data task"); return}
+        guard let url = makeUrlForArticles(with: sources, query:nil) else { return}
     
         let session = URLSession(configuration: .default)
         currentSession = session
@@ -113,7 +112,6 @@ class NetworkManager: NewsNetworker {
             if let data = data {
                 let decoder = JSONDecoder()
                 do {
-                    print(response!)
                     let articleResponse = try decoder.decode(ArticleResponse.self, from: data)
                     print(articleResponse.status)
                     let articles = articleResponse.articles

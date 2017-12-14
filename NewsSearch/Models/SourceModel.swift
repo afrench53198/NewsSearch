@@ -14,13 +14,13 @@ struct SourceResponse: Decodable {
 }
 
 // represents the abbreviated source object that is to be parsed from an article
-struct ParseableNewsSource: Decodable {
+struct ParseableNewsSource: Codable {
     var name:String
     var id: String
 }
 
 // the data type displayed in sources table view.
-class NewsSource: Decodable, NewsItem {
+class NewsSource: Codable, NewsItem {
     var name: String
     var description: String?
     var url: String

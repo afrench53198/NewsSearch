@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,10 +19,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="iew-kT-Tii">
-                        <rect key="frame" x="116" y="8" width="498" height="39.5"/>
+                        <rect key="frame" x="116" y="8" width="382" height="39"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cp9-Vu-rT2">
-                                <rect key="frame" x="0.0" y="0.0" width="498" height="21"/>
+                                <rect key="frame" x="0.0" y="0.0" width="378" height="21"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Label">
                                         <attributes>
@@ -35,10 +35,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tij-Bo-sh7">
-                                <rect key="frame" x="0.0" y="25" width="104" height="14.5"/>
+                                <rect key="frame" x="0.0" y="25" width="382" height="14"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l7T-g7-gR2">
-                                        <rect key="frame" x="0.0" y="0.0" width="29.5" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="14"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="h1A-UL-xRX"/>
                                         </constraints>
@@ -47,23 +47,12 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UvA-eH-4cr">
-                                        <rect key="frame" x="37.5" y="0.0" width="26.5" height="14.5"/>
+                                        <rect key="frame" x="108" y="0.0" width="274" height="14"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="Any-vS-wPA"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="54a-Ew-lvw">
-                                        <rect key="frame" x="72" y="0.0" width="32" height="14.5"/>
-                                        <attributedString key="attributedText">
-                                            <fragment content="Label">
-                                                <attributes>
-                                                    <color key="NSColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <font key="NSFont" size="12" name=".AppleSystemUIFontEmphasized"/>
-                                                    <font key="NSOriginalFont" size="12" name=".AppleSystemUIFontEmphasized"/>
-                                                    <integer key="NSUnderline" value="1"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -74,6 +63,8 @@
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Cp9-Vu-rT2" secondAttribute="trailing" constant="4" id="EcR-qr-Ekb"/>
+                            <constraint firstAttribute="trailing" secondItem="tij-Bo-sh7" secondAttribute="trailing" id="hvn-E5-fJq"/>
+                            <constraint firstItem="tij-Bo-sh7" firstAttribute="leading" secondItem="iew-kT-Tii" secondAttribute="leading" id="i4o-x7-Q3Y"/>
                         </constraints>
                     </stackView>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Za3-1O-wPV">
@@ -83,7 +74,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="uwi-yq-gZj">
-                        <rect key="frame" x="116" y="51.5" width="498" height="68.5"/>
+                        <rect key="frame" x="116" y="51" width="378" height="69"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -106,12 +97,11 @@
             <connections>
                 <outlet property="articleDescription" destination="uwi-yq-gZj" id="Xmj-Ln-7ZM"/>
                 <outlet property="articleImageView" destination="Za3-1O-wPV" id="JRT-SE-S2f"/>
-                <outlet property="authorLabel" destination="l7T-g7-gR2" id="6fS-Qr-xag"/>
-                <outlet property="categoryLabel" destination="54a-Ew-lvw" id="5vr-Fu-nvJ"/>
+                <outlet property="authorLabel" destination="l7T-g7-gR2" id="Zhl-Qi-mdd"/>
                 <outlet property="datePublished" destination="UvA-eH-4cr" id="SAH-KW-F5U"/>
                 <outlet property="titleLabel" destination="Cp9-Vu-rT2" id="oHp-hD-kWp"/>
             </connections>
-            <point key="canvasLocation" x="419" y="-116"/>
+            <point key="canvasLocation" x="175" y="-145"/>
         </tableViewCell>
     </objects>
 </document>

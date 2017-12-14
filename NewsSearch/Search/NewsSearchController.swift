@@ -20,7 +20,7 @@ import UIKit
 }
 
 class NewsSearchController: UISearchController, UISearchBarDelegate {
-    // TODO: - Set Shadow path on animation so it moves smoothly with view
+
     var customSearchBar: NewsSearchBar!
     var customDelegate: CustomSearchControllerDelegate!
     var shadowOn: Bool = false 

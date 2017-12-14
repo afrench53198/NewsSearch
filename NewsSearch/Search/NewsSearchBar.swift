@@ -10,11 +10,9 @@ import UIKit
 
 class NewsSearchBar: UISearchBar {
     
-    
     var preferredFont: UIFont!
     var preferredTextColor: UIColor!
  
-    
     init(frame: CGRect, font: UIFont, textColor: UIColor, tintColor: UIColor) {
    
         super.init(frame: frame)
@@ -49,14 +47,11 @@ class NewsSearchBar: UISearchBar {
             // Access the search field
             let searchField: UITextField = subviews[0].subviews[searchFieldIndex] as! UITextField
             
-            // Set its frame.
             searchField.frame = CGRect(x: 0, y: 5, width: bounds.size.width - 80, height: bounds.size.height - 10)
             
-            // Set the font and text color of the search field.
             searchField.font = preferredFont
             searchField.textColor = preferredTextColor
-            
-            // Set the background color of the search field.
+        
             searchField.backgroundColor = barTintColor
         }
         super.draw(rect)

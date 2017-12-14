@@ -11,35 +11,42 @@ import WebKit
 
 class NewsWebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
-    var webView: NewsWebView!
-    var urlString: String?
+    var webView: WKWebView!
+    var newsSource: NewsSource!
+
+    init(_ source: NewsSource) {
+        super.init(nibName: nil, bundle: nil)
+        newsSource = source
+    }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureWebView()
+        configureNavBar()
     }
 
     private func configureWebView() {
         let configuration = WKWebViewConfiguration()
-        webView = NewsWebView(frame: self.view.frame, configuration: configuration)
+        webView = WKWebView(frame: self.view.frame, configuration: configuration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
-        guard let thisUrl = URL(string: urlString!) else {print("Faulty Url in NewsWebViewController");return }
+        guard let thisUrl = URL(string: newsSource.url) else {print("Faulty Url in NewsWebViewController");return }
         let urlRequest = URLRequest(url: thisUrl)
         webView.load(urlRequest)
         self.view.addSubview(webView)
     }
     
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func configureNavBar () {
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationItem.title = "\(newsSource.name) Website"
+        let item = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(dismiss(animated:completion:)))
+        self.navigationItem.setLeftBarButton(item, animated: false)
     }
-    */
+  
 
 }

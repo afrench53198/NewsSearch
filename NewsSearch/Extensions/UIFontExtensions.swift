@@ -16,9 +16,7 @@ extension UIFont {
         case .systemSemiBold:  return UIFont.systemFont(ofSize: fontSize.rawValue, weight: UIFont.Weight(rawValue: 0.4))
         case .systemBold: return UIFont.systemFont(ofSize: fontSize.rawValue, weight: UIFont.Weight(rawValue: 0.6))
         default:  guard let aFont = UIFont(name: fontType.rawValue, size: fontSize.rawValue) else {print("invalid Font"); return UIFont()}
-            return aFont
+        return aFont
+        }
     }
-    
-    
-}
 }

@@ -26,8 +26,5 @@ class NewsTableView: UITableView {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
 }
 

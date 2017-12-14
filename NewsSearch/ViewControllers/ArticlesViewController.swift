@@ -9,60 +9,73 @@
 import UIKit
 
 class ArticlesViewController: UIViewController {
-    // TODO: - Migrate to V2 and update features as necessary-implement article search
-    
     
     var tableView: NewsTableView!
-    var viewModel: NewsViewModel?
-    var source: NewsSource!
-    var segmentedControl: UISegmentedControl!
+    var viewModel: ArticlesTableViewModel!
+    var source: NewsSource?
+    let articlesNetworker = NetworkManager()
+    var searchBar: NewsSearchBar?
+    var selectedArticle: NewsArticle?
     
+    init( _ source: NewsSource?) {
+        super.init(nibName: nil, bundle: nil)
+        self.title = "\(source?.name ?? "") articles"
+        self.source = source
+        configureNavBar()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+        
     }
     override func viewDidLayoutSubviews() {
         setupViews()
     }
-    @objc func backItemPressed(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    // This Function sets up all the frames for views and injects dependencies
+    /// This Function sets up all the inital frames for views and injects dependencies
     private func configure() {
         configureNavBar()
         configureTableView()
-        viewModel = ArticlesViewModel(with: NetworkManager(), tableView: tableView, source: source)
-        
+        guard let source = self.source else {viewModel = ArticlesTableViewModel(with: articlesNetworker, tableView: tableView); return}
+        viewModel = ArticlesTableViewModel(with: articlesNetworker, tableView: tableView, source: source)
     }
-    // Sets frame in DidLayoutSubviews so when the device rotates the views orient themselves correctly
+    /// Sets frame again if needed for device rotation
     private func setupViews() {
         let tableViewSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height - 40)
-        let tableViewFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: tableViewSize, padding: 0).makeLayout()
+        let tableViewFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: tableViewSize, padding: (0,0)).makeInnerLayout()
         tableView.frame = tableViewFrame
-        
     }
     /// Sets Table View frame and data source/delegate
     private func configureTableView() {
         let tableViewSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height - 40)
-        let tableViewFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: tableViewSize, padding: 0).makeLayout()
+        let tableViewFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: tableViewSize, padding: (0,0)).makeInnerLayout()
         tableView = NewsTableView(frame: tableViewFrame, style: .plain, type: Identifier.TableViewCell.ArticleCell)
-        tableView.dataSource = viewModel as? UITableViewDataSource
+        tableView.dataSource = viewModel
+        tableView.delegate = self
         self.view.addSubview(tableView)
     }
     ///Styles the Navigation Bar
     private func configureNavBar () {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        guard let source = self.source else {self.navigationItem.title = "Articles"; return}
         self.navigationItem.title = "\(source.name) Articles"
-    }
-   
-    private func configureSegmentedControl() {
-        let segmentedControlFrame = UIView.ViewLayout(withBounds: self.view, position: .bottomCenter, size: CGSize(width: self.view.bounds.width, height: 32), padding: 0).makeLayout()
-        let items = ["latest","popular","relevant"]
-        segmentedControl = UISegmentedControl.makeControl(color: .black, items: items, frame: segmentedControlFrame, action: nil)
+        let item = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(dismiss(sender:)))
+        self.navigationItem.setLeftBarButton(item, animated: false)
     }
     
     
-    
-    
+    @objc private func dismiss(sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ArticlesViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        <#code#>
+    }
 }

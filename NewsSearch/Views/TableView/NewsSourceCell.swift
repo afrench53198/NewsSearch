@@ -16,7 +16,6 @@ class NewsSourceCell: UITableViewCell {
     }
 
     @IBOutlet weak var SourceName: UILabel!
-    
     @IBOutlet weak var Category: UILabel!
     @IBOutlet weak var SourceDescription: UILabel!
     
