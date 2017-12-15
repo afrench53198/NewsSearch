@@ -34,7 +34,7 @@ extension UIView {
         var guide: CGRect
         var position: ViewPosition
         var size: CGSize
-        // First float is vertical padding-negative pushed view up on the screen and positive pushes it down. Second float is horizontal padding-negative pushes view left and positive pushes it right
+        // First float is vertical padding- negative pushed view up on the screen and positive pushes it down. Second float is horizontal padding-negative pushes view left and positive pushes it right
         var padding: (CGFloat,CGFloat)
         
         // Usually you want to use this init unless laying out view with the root view as the guide
@@ -92,7 +92,7 @@ extension UIView {
             case .topRight:
                 return CGPoint(x: guide.maxX + padding.1 , y: guide.minY + size.height + padding.0)
             case .topCenter:
-                return CGPoint(x: guide.midX - (size.width / 2) + padding.1, y: guide.minY + size.height + padding.0)
+                return CGPoint(x: guide.midX - (size.width / 2) + padding.1, y: guide.y - (size.height + padding.0))
             case .right:
                 return CGPoint(x: guide.maxX + padding.1 , y: guide.midY  - (size.height / 2) + padding.0)
             case .left:

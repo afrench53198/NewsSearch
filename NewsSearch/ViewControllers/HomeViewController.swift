@@ -26,10 +26,10 @@ class HomeViewController: UIViewController {
             tableView?.frame = tableViewFrame
         }
     }
-    var popupView: NewsPopUpView?
+    var popupView: NewsPopupView?
     // Used by View Model to set current data for search
     var currentCategories: [Category]? = nil
-    var backgroundView: UIView?
+    var backgroundView = UIView()
     let sharedNetworker = NetworkManager()
     
     // This property is used to track the source that would be passed to a new controller
@@ -39,7 +39,6 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         configure()
         self.title = "Home"
-       
     }
     
     private func configure() {
@@ -135,28 +134,29 @@ extension HomeViewController: UITableViewDelegate {
         let viewFrame = UIView.ViewLayout(withBounds: self.view, position: .center, size: CGSize(width: self.view.bounds.width, height: 400), padding:(0,0)).makeInnerLayout()
         let data = viewModel.returnData(at: indexPath.row)
         selectedSource = data as? NewsSource
-        popupView = NewsPopUpView(with: data, frame: viewFrame)
+        popupView = SourcePopupView(with: data, frame: viewFrame)
         popupView?.delegate = self
-        backgroundView = UIView(frame: self.view.frame)
-        backgroundView?.backgroundColor = .gray
-        backgroundView?.alpha = 0.7
-        if let view = popupView, let bg = backgroundView {
-            self.view.addSubview(bg)
-            self.view.addSubview(view)
-            self.navigationItem.title = popupView!.source.name
+        backgroundView.backgroundColor = .white
+        backgroundView.frame = self.view.frame
+        backgroundView.alpha = 0.7
+        if let popup = popupView as? UIView{
+            self.view.addSubview(backgroundView)
+            self.view.addSubview(popup)
+            self.navigationItem.title = data.name
             self.navigationController?.setNavigationBarHidden(false, animated: true)
         }
     }
 }
 
 
-extension HomeViewController: PopupViewDelegate {
+extension HomeViewController: PopupViewDelegate, CAAnimationDelegate {
     
     func closeButtonPressed() {
-        popupView?.animateOut()
+        guard let popup = popupView as? SourcePopupView else {return}
+        popup.animateOut()
         selectedSource = nil
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.backgroundView?.removeFromSuperview()
+        self.backgroundView.removeFromSuperview()
     }
     func websiteButtonPressed() {
         guard let source = selectedSource else {return}
@@ -170,7 +170,6 @@ extension HomeViewController: PopupViewDelegate {
         let navController = UINavigationController(rootViewController: viewController)
         present(navController, animated: true, completion: nil)
     }
-    
 }
 
 

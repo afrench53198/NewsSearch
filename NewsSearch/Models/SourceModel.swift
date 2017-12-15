@@ -21,9 +21,9 @@ struct ParseableNewsSource: Codable {
 
 // the data type displayed in sources table view.
 class NewsSource: Codable, NewsItem {
-    var name: String
+    var name: String = ""
     var description: String?
-    var url: String
-    var category: String
+    var url: String = ""
+    var category: String = ""
     var id: String = ""
 }

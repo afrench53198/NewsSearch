@@ -32,6 +32,8 @@ extension UIButton {
             button.backgroundColor = UIColor.darkGray
         case .black:
             button.backgroundColor = UIColor.black
+        case .white:
+            button.backgroundColor = .white
         }
         
         switch type {

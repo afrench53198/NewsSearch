@@ -33,13 +33,14 @@ public enum FontType: String{
     case font1Heavy = "Helvetica-Bold"
     case font1Light = "Helvetica-Light"
     
-    case system = "system"
+    case system = "System"
     case systemSemiBold = "System-Semibold"
     case systemBold = "System-Bold"
 }
 
 public enum ColorScheme {
  
+    case white
     case lightGrey
     case darkGrey
     case black
@@ -47,7 +48,7 @@ public enum ColorScheme {
 
 extension UILabel {
     
-     static func createAhtauLabel(fontType: FontType, fontSize: FontSize, text: String, color: ColorScheme) -> UILabel {
+     static func makeLabel(fontType: FontType, fontSize: FontSize, text: String, color: ColorScheme) -> UILabel {
         
         let label = UILabel()
        
@@ -57,6 +58,7 @@ extension UILabel {
         case .lightGrey: label.textColor = UIColor.gray
         case .darkGrey: label.textColor = UIColor.darkGray
         case .black: label.textColor = .black
+        case .white: label.textColor = .white
         }
         
         label.text = text

@@ -16,6 +16,7 @@ class ArticlesViewController: UIViewController {
     let articlesNetworker = NetworkManager()
     var searchBar: NewsSearchBar?
     var selectedArticle: NewsArticle?
+    var popupView: NewsPopupView?
     
     init( _ source: NewsSource?) {
         super.init(nibName: nil, bundle: nil)
@@ -76,6 +77,9 @@ class ArticlesViewController: UIViewController {
 
 extension ArticlesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        <#code#>
+        let data = viewModel.returnData(at: indexPath.row)
+        let controller = ArticleDetailViewController(item: data)
+        let navController = UINavigationController(rootViewController: controller)
+        self.present(navController, animated: true, completion: nil)
     }
 }

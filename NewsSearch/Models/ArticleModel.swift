@@ -15,11 +15,11 @@ struct ArticleResponse: Decodable  {
 
 
 class NewsArticle: Codable, NewsItem  {
-    var author: String?
-    var title: String?
+    var author: String? = ""
+    var title: String? = ""
     var description: String?
-    var url: String
-    var urlToImage: String?
-    var publishedAt: String?
-    var source: ParseableNewsSource
+    var url: String = ""
+    var urlToImage: String? = ""
+    var publishedAt: String? = ""
+    var source: ParseableNewsSource = ParseableNewsSource(name: "", id: "")
 }

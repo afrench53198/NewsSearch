@@ -11,10 +11,34 @@ import UIKit
 protocol NewsPopupView {
     var item: NewsItem {get set}
     var delegate: PopupViewDelegate? {get set}
+
 }
 
 // Extending NewsPopup View to have default handling of it's own animations
-extension NewsPopupView where Self: UIView {
+extension NewsPopupView where Self:UIView {
+   
+    func animateIn(completion: ()->()) {
+
+        let thisLayer = self.layer
+        
+        let animation = CABasicAnimation(keyPath: "cornerRadius")
+        animation.fromValue = 500
+        animation.toValue = 5
+    
+        let animation2 = CABasicAnimation(keyPath: "shadowOpacity")
+        animation2.fromValue = 0
+        animation2.toValue = 1
+        
+        let group = CAAnimationGroup()
+        group.animations = [animation,animation2]
+        group.duration = 0.35
+        group.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        group.autoreverses = false
+        group.isRemovedOnCompletion = true
+        thisLayer.add(group, forKey: "animations")
+        completion()
+    }
+    
     func animateOut() {
         let thisLayer = self.layer
         let animation = CABasicAnimation(keyPath: "cornerRadius")
@@ -34,37 +58,22 @@ extension NewsPopupView where Self: UIView {
         group.delegate = self as? CAAnimationDelegate
         thisLayer.add(group, forKey: "animations")
     }
-   func animateIn(completion: ()->()) {
+    /// Sets shadow after view animates in
+  func configureShadow() {
         let thisLayer = self.layer
-        let animation = CABasicAnimation(keyPath: "cornerRadius")
-        
-        animation.fromValue = 500
-        animation.toValue = 5
-        
-        let animation2 = CABasicAnimation(keyPath: "shadowOpacity")
-        animation2.fromValue = 0
-        animation2.toValue = 1
-        
-        let group = CAAnimationGroup()
-        group.animations = [animation,animation2]
-        group.duration = 0.35
-        group.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-        group.autoreverses = false
-        group.isRemovedOnCompletion = true
-        thisLayer.add(group, forKey: "animations")
-        completion()
-    }
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        if flag {
-            self.removeFromSuperview()
-        }
+        thisLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: 5).cgPath
+        thisLayer.shadowColor = UIColor.black.cgColor
+        thisLayer.shadowRadius = 30
+        thisLayer.shadowOpacity = 1
+        thisLayer.cornerRadius = 5
     }
 }
 
-class SourcePopupView: UIView, NewsPopupView{
+class SourcePopupView: UIView,NewsPopupView{
     
     var item: NewsItem
     var delegate: PopupViewDelegate?
+
     private var toWebsiteButton: UIButton!
     private var closeButton: UIButton!
     private var articlesButton: UIButton!
@@ -73,17 +82,24 @@ class SourcePopupView: UIView, NewsPopupView{
     init(with item: NewsItem, frame: CGRect) {
         self.item = item
         super.init(frame: frame)
+        self.frame = frame
         self.backgroundColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {
+        do {
+              self.item = try NewsSource(from: aDecoder as! Decoder)
+        } catch {
+            print("Couldn't decode News Source")
+            self.item = NewsSource()
+        }
         super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
-    
     override func didMoveToSuperview() {
         animateIn {
-            configureShadow()
             configureViews()
+            configureShadow()
         }
     }
     
@@ -105,15 +121,13 @@ class SourcePopupView: UIView, NewsPopupView{
         self.addSubview(closeButton)
         
         if let thisDescription = item.description {
-            sourceDescriptionLabel = UILabel.createAhtauLabel(fontType: .system, fontSize: .p1, text: thisDescription, color: .black)
+            sourceDescriptionLabel = UILabel.makeLabel(fontType: .system, fontSize: .p1, text: thisDescription, color: .black)
             sourceDescriptionLabel.numberOfLines = 10
             sourceDescriptionLabel.frame = sourceDescriptionFrame
             sourceDescriptionLabel.textAlignment = .center
             self.addSubview(sourceDescriptionLabel)
         }
-       
     }
-    
     
     @objc func websiteButtonPressed(_ sender: UIButton) {
         delegate?.websiteButtonPressed()
@@ -130,17 +144,16 @@ class SourcePopupView: UIView, NewsPopupView{
     @objc func sourcesButtonPressed(_ sender: UIButton) {
         delegate?.articlesButtonPressed()
     }
-    
-    private func configureShadow() {
-        let thisLayer = self.layer
-        thisLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: 5).cgPath
-        thisLayer.shadowColor = UIColor.black.cgColor
-        thisLayer.shadowRadius = 30
-        self.layer.shadowOpacity = 1
-        thisLayer.cornerRadius = 5
-    }
-    
    
 }
+
+extension SourcePopupView: CAAnimationDelegate {
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if flag {
+            self.removeFromSuperview()
+        }
+    }
+}
+
 
 

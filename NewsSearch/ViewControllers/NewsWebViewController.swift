@@ -12,14 +12,15 @@ import WebKit
 class NewsWebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
 
     var webView: WKWebView!
-    var newsSource: NewsSource!
+    var item: NewsItem
 
-    init(_ source: NewsSource) {
+    init(_ item: NewsItem) {
+        self.item = item
         super.init(nibName: nil, bundle: nil)
-        newsSource = source
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.item = NewsArticle()
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
@@ -35,7 +36,7 @@ class NewsWebViewController: UIViewController, WKUIDelegate, WKNavigationDelegat
         webView = WKWebView(frame: self.view.frame, configuration: configuration)
         webView.uiDelegate = self
         webView.navigationDelegate = self
-        guard let thisUrl = URL(string: newsSource.url) else {print("Faulty Url in NewsWebViewController");return }
+        guard let thisUrl = URL(string: item.url) else {print("Faulty Url in NewsWebViewController");return }
         let urlRequest = URLRequest(url: thisUrl)
         webView.load(urlRequest)
         self.view.addSubview(webView)
@@ -43,10 +44,11 @@ class NewsWebViewController: UIViewController, WKUIDelegate, WKNavigationDelegat
     
     private func configureNavBar () {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationItem.title = "\(newsSource.name) Website"
-        let item = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(dismiss(animated:completion:)))
+        let item = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(close(_:)))
         self.navigationItem.setLeftBarButton(item, animated: false)
     }
-  
+    @objc private func close(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
 
 }
